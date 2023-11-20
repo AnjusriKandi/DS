@@ -1,0 +1,130 @@
+#include<stdio.h>
+#include<stdlib.h>
+int size=10;
+struct node
+{
+    int data;
+    struct node*next;
+};
+struct node* front=NULL;
+struct node*rear=NULL;
+int count=0;
+void enqueue()
+{
+    struct node*temp;
+    if(count==size)
+    {
+        printf("Queue is full\n");
+        return;
+    }
+    else
+    {
+        int value;
+        temp=(struct node*)malloc(sizeof(struct node));
+        printf("Enter the data to be inserted:");
+        scanf("%d",&value);
+        temp->data=value;
+        temp->next=NULL;
+        if(front==NULL)
+        {
+            front=temp;
+            rear=temp;
+        }
+        else
+          rear->next=temp;
+         count++;
+    }
+}
+void dequeue()
+{
+    if(front==NULL)
+      printf("Queue is empty\n");
+    else
+    {
+        struct node *p;
+        p=front;
+        front=front->next;
+        printf("Removed element is %d\n",p->data);
+        free(p);
+        count--;
+    }
+}
+void Front()
+{
+    if(front==NULL)
+      printf("Queue is empty\n");
+    else
+      printf("%d\n",front->data);
+}
+void Rear()
+{
+    if(rear==NULL)
+       printf ("Queue is empty\n");
+    else
+       printf("%d",rear->data);
+}
+void isFull()
+{
+    if(count==size)
+       printf("Queue is full\n");
+    else
+       printf("Queue is not full\n");
+}
+void isEmpty()
+{
+    if(count==0)
+       printf("Queue is empty\n");
+    else
+       printf("Queue is not empty\n");
+}
+void display()
+{
+    if(count==0)
+       printf("Queue is empty\n");
+    else
+    {
+    struct node*t;
+    t=front;
+    while(t->next!=rear)
+    {
+        printf("%d",t->data);
+    }
+    printf("%d",rear->data);
+    }
+}
+int main()
+{
+    int choice;
+    while(1)
+    {
+        printf("1.Enqueue\n");
+        printf("2.Dequeue\n");
+        printf("3.Front\n");
+        printf("4.Rear\n");
+        printf("5.isFull\n");
+        printf("6.isEmpty\n");
+        printf("7.Display\n");
+        printf("8.Exit\n");
+        printf("Enter your choice:");
+        scanf("%d",&choice);
+        switch(choice)
+        {
+            case 1:enqueue();
+                   break;
+            case 2:dequeue();
+            break;
+            case 3:Front();
+            break;
+            case 4:Rear();
+            break;
+            case 5:isFull();
+            break;
+            case 6:isEmpty();
+            break;
+            case 7:display();
+            break;
+            case 8:return 0;
+            default: printf("Entered choice is not in the given range\n");
+        }
+    }
+}
