@@ -1,0 +1,120 @@
+#include <stdio.h>
+#include <stdlib.h>
+#define MAX_SIZE 5
+int a[MAX_SIZE];
+int front = -1;
+int rear = -1;
+
+void enqueue()
+{
+        int item;
+    printf("Enter the element to be inserted:");
+    scanf("%d",&item);
+if (front == -1 && rear == -1)
+{
+front = rear = 0;
+}	
+else if ((rear + 1) % MAX_SIZE == front)
+{
+printf("queue is full\n");
+return;
+}
+else
+rear = (rear + 1) % MAX_SIZE;
+a[rear] = item;
+}
+void dequeue()
+{
+if (front == -1 && rear == -1)
+{
+printf("queue is empty \n");
+return;
+}
+else if (front == rear)
+{
+front = rear = -1;
+}
+else
+front = (front + 1) % MAX_SIZE;
+}
+
+void Front()
+
+{
+
+if (front == -1)
+     printf("Queue is empty\n");
+else
+     printf("%d", a[front]);
+
+}
+void Rear()
+{
+    if (rear == -1)
+     printf("Queue is empty\n");
+else
+     printf("%d", a[rear]);
+}
+void display()
+
+{
+
+   int count = ((rear + MAX_SIZE - front) % MAX_SIZE)+1;
+   int i;
+   for (i = 0; i < count; i++)
+   {
+     printf("%d ", a[(front+i)%MAX_SIZE]);
+   }
+   printf("\n");
+}
+void isEmpty()
+{
+    if (rear == -1)
+     printf("Queue is empty\n");
+    else
+     printf("Queue is not empty");
+}
+void isFull()
+{
+    if ((rear + 1) % MAX_SIZE == front) 
+         printf("queue is full\n");
+    else
+         printf("Queue is not full\n");
+}
+
+int main()
+{
+    int choice;
+    while(1)
+    {
+        printf("1.Enqueue\n");
+        printf("2.Dequeue\n");
+        printf("3.Front\n");
+        printf("4.Rear\n");
+        printf("5.isFull\n");
+        printf("6.isEmpty\n");
+        printf("7.Display\n");
+        printf("8.Exit\n");
+        printf("Enter your choice:");
+        scanf("%d",&choice);
+        switch(choice)
+        {
+            case 1:enqueue();
+                   break;
+            case 2:dequeue();
+            break;
+            case 3:Front();
+            break;
+            case 4:Rear();
+            break;
+            case 5:isFull();
+            break;
+            case 6:isEmpty();
+            break;
+            case 7:display();
+            break;
+            case 8:return 0;
+            default: printf("Entered choice is not in the given range\n");
+        }
+    }
+}
