@@ -1,0 +1,26 @@
+#include<stdio.h>
+int linear_integers(int[],int,int);
+int main()
+{	
+   int n,target;
+   printf(“Enter the size of array”);
+   scanf(“%d”,&n);
+   int a[n];
+   for(int i=0;i<n;i++)
+  {
+     scanf(“%d”,&a[i]);
+  }
+  printf(“Enter the element to be searched:”);
+  scanf(“%d”,&target);
+  int index=linear_integers(a,n,target);
+  printf(“Element is found at %d”,index);
+  return 0;
+}
+int linear_integers(int a[],int n,int target)
+{
+   for(int i=0;i<n;i++)
+  {
+     if(target==a[i])
+           return i;
+  }
+  return -1; }
