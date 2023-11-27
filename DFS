@@ -1,0 +1,64 @@
+#include <stdio.h>
+#include <stdlib.h>
+int vis[100];
+struct Graph {
+    int V;
+    int E;
+    int** Adj;
+};
+struct Graph* adjMatrix(int vertices, int edges, int edgeList[][2]) {
+    struct Graph* G = (struct Graph*)malloc(sizeof(struct Graph));
+    if (!G) {
+        printf("Memory Error\n");
+        return NULL;
+    }
+    G->V = vertices;
+    G->E = edges;
+    G->Adj = (int*)malloc((G->V) * sizeof(int));
+    for (int k = 0; k < G->V; k++) {
+        G->Adj[k] = (int*)malloc((G->V) * sizeof(int));
+    }
+    for (int u = 0; u < G->V; u++) {
+        for (int v = 0; v < G->V; v++) {
+            G->Adj[u][v] = 0;
+        }
+    }
+    for (int i = 0; i < G->E; i++) {
+        int u = edgeList[i][0];
+        int v = edgeList[i][1];
+        G->Adj[u][v] = G->Adj[v][u] = 1;
+    }
+    return G;
+}
+void DFS(struct Graph* G, int u) {
+    vis[u] = 1;
+    printf("%d ", u);
+    for (int v = 0; v < G->V; v++) {
+        if (!vis[v] && G->Adj[u][v])
+            DFS(G, v);
+    }
+}
+void DFStraversal(struct Graph* G) {
+    for (int i = 0; i < 100; i++) {
+        vis[i] = 0;
+    }
+    for (int i = 0; i < G->V; i++) {
+        if (!vis[i])
+            DFS(G, i);
+    }
+}
+int main() {
+    int vertices, edges;
+    printf("Enter the number of vertices: ");
+    scanf("%d", &vertices);
+    printf("Enter the number of edges: ");
+    scanf("%d", &edges);
+    int edgeList[edges][2];
+    printf("Enter the edges (vertex pairs):\n");
+    for (int i = 0; i < edges; i++) {
+        scanf("%d %d", &edgeList[i][0], &edgeList[i][1]);
+    }
+    struct Graph* G = adjMatrix(vertices, edges, edgeList);
+    DFStraversal(G);
+    return 0;
+}
