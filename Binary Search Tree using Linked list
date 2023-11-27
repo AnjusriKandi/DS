@@ -1,0 +1,204 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+// Node structure for the binary search tree
+struct Node {
+    int data;
+    struct Node *left;
+    struct Node *right;
+};
+
+// Function to create a new node
+struct Node *createNode(int value) {
+    struct Node *newNode = (struct Node *)malloc(sizeof(struct Node));
+    newNode->data = value;
+    newNode->left = newNode->right = NULL;
+    return newNode;
+}
+
+// Function to insert a value into the tree
+struct Node *insert(struct Node *root, int value) {
+    if (root == NULL) {
+        return createNode(value);
+    }
+
+    if (value < root->data) {
+        root->left = insert(root->left, value);
+    } else if (value > root->data) {
+        root->right = insert(root->right, value);
+    }
+
+    return root;
+}
+
+// Function to find the minimum value in the tree
+struct Node *findMin(struct Node *root) {
+    while (root->left != NULL) {
+        root = root->left;
+    }
+    return root;
+}
+
+// Function to delete a value from the tree
+struct Node *deleteNode(struct Node *root, int value) {
+    if (root == NULL) {
+        return root;
+    }
+
+    if (value < root->data) {
+        root->left = deleteNode(root->left, value);
+    } else if (value > root->data) {
+        root->right = deleteNode(root->right, value);
+    } else {
+        // Node with only one child or no child
+        if (root->left == NULL) {
+            struct Node *temp = root->right;
+            free(root);
+            return temp;
+        } else if (root->right == NULL) {
+            struct Node *temp = root->left;
+            free(root);
+            return temp;
+        }
+
+        // Node with two children, get the inorder successor
+        struct Node *temp = findMin(root->right);
+
+        // Copy the inorder successor's data to this node
+        root->data = temp->data;
+
+        // Delete the inorder successor
+        root->right = deleteNode(root->right, temp->data);
+    }
+
+    return root;
+}
+
+// Function to perform inorder traversal
+void inorder(struct Node *root) {
+    if (root != NULL) {
+        inorder(root->left);
+        printf("%d ", root->data);
+        inorder(root->right);
+    }
+}
+
+// Function to perform preorder traversal
+void preorder(struct Node *root) {
+    if (root != NULL) {
+        printf("%d ", root->data);
+        preorder(root->left);
+        preorder(root->right);
+    }
+}
+
+// Function to perform postorder traversal
+void postorder(struct Node *root) {
+    if (root != NULL) {
+        postorder(root->left);
+        postorder(root->right);
+        printf("%d ", root->data);
+    }
+}
+
+// Function to perform level order traversal
+void levelorder(struct Node *root) {
+    if (root == NULL) {
+        return;
+    }
+
+    // TODO: Implement level order traversal using a queue
+}
+
+// Function to calculate the height of the tree
+int height(struct Node *root) {
+    if (root == NULL) {
+        return -1;
+    } else {
+        int leftHeight = height(root->left);
+        int rightHeight = height(root->right);
+        return 1 + (leftHeight > rightHeight ? leftHeight : rightHeight);
+    }
+}
+
+// Function to find the depth of a specific node
+int depth(struct Node *root, int value, int currentDepth) {
+    if (root == NULL) {
+        return -1;
+    } else if (value == root->data) {
+        return currentDepth;
+    } else if (value < root->data) {
+        return depth(root->left, value, currentDepth + 1);
+    } else {
+        return depth(root->right, value, currentDepth + 1);
+    }
+}
+
+// Function to find the maximum value in the tree
+struct Node *findMax(struct Node *root) {
+    while (root->right != NULL) {
+        root = root->right;
+    }
+    return root;
+}
+
+// Function to search for a value in the tree
+struct Node *search(struct Node *root, int value) {
+    if (root == NULL || root->data == value) {
+        return root;
+    }
+
+    if (value < root->data) {
+        return search(root->left, value);
+    }
+
+    return search(root->right, value);
+}
+
+int main() {
+    struct Node *root = NULL;
+
+    // Insert values into the tree
+    int values[] = {50, 30, 70, 20, 40, 60, 80};
+    for (int i = 0; i < sizeof(values) / sizeof(values[0]); i++) {
+        root = insert(root, values[i]);
+    }
+
+    // Perform traversals
+    printf("Inorder: ");
+    inorder(root);
+    printf("\n");
+
+    printf("Preorder: ");
+    preorder(root);
+    printf("\n");
+
+    printf("Postorder: ");
+    postorder(root);
+    printf("\n");
+
+    // Display height of the tree
+    printf("Height of the tree: %d\n", height(root));
+
+    // Find min and max values
+    printf("Minimum value: %d\n", findMin(root)->data);
+    printf("Maximum value: %d\n", findMax(root)->data);
+
+    // Search for a value
+    int searchValue = 40;
+    struct Node *searchResult = search(root, searchValue);
+    if (searchResult != NULL) {
+        printf("%d found in the tree.\n", searchValue);
+    } else {
+        printf("%d not found in the tree.\n", searchValue);
+    }
+
+    // Find height and depth of each node
+    for (int i = 0; i < sizeof(values) / sizeof(values[0]); i++) {
+        int nodeDepth = depth(root, values[i], 0);
+        printf("Node %d: Height=%d, Depth=%d\n", values[i], height(search(root, values[i])), nodeDepth);
+    }
+
+    return 0;
+}
+
